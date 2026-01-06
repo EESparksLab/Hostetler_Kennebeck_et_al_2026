@@ -71,7 +71,7 @@ packageVersion("multcomp")
 cat("\014")
 rm(list=ls()) 
 ls() 
-setwd(dir = "/Users/ashley/Desktop/Hostetler_et_al_2025/")
+setwd(dir = "/Users/ashley/Desktop/Hostetler_Kennebeck_et_al_2026/")
 getwd()
 
 df1 = read.csv("Data/EnviormentalData.csv", header = TRUE, na.strings = "NA")
@@ -781,6 +781,7 @@ rm(list = setdiff(ls(), c("data","cultivar_labels","rep_labels")))
 #Figure 4 & Figure S4####
 head(data)
 df0 = data
+colnames(data)
 traits = colnames(data)[c(6:9,12)] 
 traits
 data_scaled = data %>%
@@ -865,10 +866,13 @@ for(trait in traits){
 results_df = bind_rows(results_list)
 head(results_df)
 #write.csv(results_df, "Figures/TableS6.csv", row.names = FALSE)
+data = df0
 rm(list = setdiff(ls(), c("data","cultivar_labels","rep_labels")))
 head(data)
 df0 = data
-traits = colnames(data)[c(6:9,12)]
+data$DMP = (data$Shoot.Dry.Mass/data$Shoot.Fresh.Mass) * 100
+colnames(data)
+traits = colnames(data)[c(6:9,12,18)]
 results_list = list()
 diag_list = list()
 emmeans_bt_list = list()
@@ -1015,14 +1019,15 @@ emmeans_df      = bind_rows(emmeans_bt_list)
 contrasts_df    = bind_rows(contrasts_bt_list)
 tukey_main_df   = bind_rows(tukey_main_list)
 tukey_letters_df = bind_rows(tukey_letters_list)
-#write.csv(results_df, "Figures/TableS7.csv", row.names = TRUE)
-#write.csv(tukey_letters_df, "Figures/TableS8.csv", row.names = FALSE)
+#write.csv(results_df, "TableS7.csv", row.names = TRUE)
+#write.csv(tukey_letters_df, "TableS8.csv", row.names = FALSE)
 
 data = df0
 rm(list = setdiff(ls(), c("data","cultivar_labels","rep_labels")))
 head(data)
 data$Replication = factor(data$Replication, levels = c(1, 2, 3, 4, 5))
-
+df0 = data
+data$DMP = (data$Shoot.Dry.Mass/data$Shoot.Fresh.Mass) * 100
 A = ggplot(data, aes(x = Cultivar, y = Apical.Bud.Height))+
   geom_boxplot(aes(fill = Cultivar), position = position_dodge(width = 0.8)) +
   labs(
@@ -1126,6 +1131,25 @@ E = ggplot(data, aes(x = Clinostat, y = RootLength_cm))+
         axis.title.y = element_text(face="bold", size=10))+
   facet_wrap(~Replication, labeller = labeller(Replication = rep_labels), nrow=1)
 E
+F = ggplot(data, aes(x = Clinostat, y = DMP))+
+  geom_boxplot(aes(fill = Clinostat), position = position_dodge(width = 0.8)) +
+  labs(
+    fill = "Clinostat Type",
+    x = "Clinostat Type",
+    y = "Dry Mass (%)"
+  )+
+  scale_fill_manual(values = c("palegreen4", "burlywood1"),
+                    labels = c("C" = "Control", "SM" = "Simulated Microgravity"))+ 
+  theme_bw()+
+  theme(legend.position = "none",
+        axis.text.x = element_text(size=10, angle = 60, hjust=1),
+        axis.text.y = element_text(size=10),
+        axis.text = element_text(size=10),
+        axis.title = element_text(face="bold", size=10),
+        axis.title.x = element_text(face="bold", size=10),
+        axis.title.y = element_text(face="bold", size=10))+
+  facet_wrap(~Replication, labeller = labeller(Replication = rep_labels), nrow=1)
+F
 gglist = list(B, C, D, E)
 combined_plot = plot_grid(plotlist = gglist, ncol = 2, labels = LETTERS[1:5])
 combined_plot
@@ -1135,10 +1159,13 @@ combined_plot
 #pdf(file="Figures/FigS4.pdf", width=6, height=4)
 A  
 #dev.off()
-
+#pdf(file="FigS5.pdf", width=6, height=4)
+F  
+#dev.off()
+data = df0
 rm(list = setdiff(ls(), c("data","cultivar_labels","rep_labels")))
 
-#Figure 5 & Figure S5 ####
+#Figure 5 & Figure S6 ####
 df0 = data
 data = subset(df0, Clinostat == "C")
 head(data)
@@ -1554,7 +1581,7 @@ E2
 gglist = list(B, C, D, E, B2, C2, D2, E2)
 combined_plot = plot_grid(plotlist = gglist, ncol = 4, labels = c("A", "", "", "", "B", "", "", ""), label_x = 0, label_y = 1)
 combined_plot
-#pdf(file="Figures/FigureS5.pdf", width=8, height=6)
+#pdf(file="Figures/FigureS6.pdf", width=8, height=6)
 combined_plot  
 #dev.off()
 
