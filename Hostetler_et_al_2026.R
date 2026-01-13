@@ -1264,7 +1264,6 @@ for (i in c(6:9,12)){
                 row.names = FALSE, col.names = FALSE, append=TRUE)
   }
 }
-
 unique(data$Solar_sum)
 data$Replication = factor(data$Replication, levels = c(1, 2, 4, 3, 5))
 solar_factor = diff(range(data$Solar_sum)) / 20
@@ -1469,7 +1468,6 @@ for (i in c(6:9,12)){
                 row.names = FALSE, col.names = FALSE, append=TRUE)
   }
 }
-
 unique(data$Solar_sum)
 data$Replication = factor(data$Replication, levels = c(1, 2, 4, 3, 5))
 solar_factor = diff(range(data$Solar_sum)) / 10
@@ -1855,19 +1853,22 @@ F = ggplot(norm_long %>%
 F
 #pdf(file="Figures/Figure5.pdf", width=8, height=6)
 ggdraw() +
-  draw_plot(B, x = 0, y = 0.50, width = 0.175, height = 0.5) +
-  draw_plot(C, x = 0.175, y = 0.50, width = 0.175, height = 0.5) +
-  draw_plot(D, x = 0.35, y = 0.50, width = 0.175, height = 0.5) +
-  draw_plot(E, x = 0.525, y = 0.50, width = 0.175, height = 0.5) +
-  draw_plot(B2, x = 0, y = 0, width = 0.175, height = 0.5) +
-  draw_plot(C2, x = 0.175, y = 0, width = 0.175, height = 0.5) +
-  draw_plot(D2, x = 0.35, y = 0, width = 0.175, height = 0.5) +
-  draw_plot(E2, x = 0.525, y = 0, width = 0.175, height = 0.5) +
-  draw_plot(F, x = 0.7, y = 0, width = 0.3, height = 0.75) +
-  draw_plot_label(label = c("A", "B", "C"), 
+  draw_plot(B, x = 0, y = 0.50, width = 0.25, height = 0.5) +
+  draw_plot(C, x = 0.25, y = 0.50, width = 0.25, height = 0.5) +
+  draw_plot(D, x = 0.50, y = 0.50, width = 0.25, height = 0.5) +
+  draw_plot(E, x = 0.75, y = 0.50, width = 0.25, height = 0.5) +
+  draw_plot(B2, x = 0, y = 0, width = 0.25, height = 0.5) +
+  draw_plot(C2, x = 0.25, y = 0, width = 0.25, height = 0.5) +
+  draw_plot(D2, x = 0.50, y = 0, width = 0.25, height = 0.5) +
+  draw_plot(E2, x = 0.75, y = 0, width = 0.25, height = 0.5) +
+  draw_plot_label(label = c("A", "B"), 
                   size = 10,
-                  x = c(0,0,0.7), 
-                  y = c(1,0.5,0.75))
+                  x = c(0,0), 
+                  y = c(1,0.5))
+#dev.off()
+
+#pdf(file="/Figure6.pdf", width=4, height=6)
+F
 #dev.off()
 data = df0
 rm(list = setdiff(ls(), c("data","cultivar_labels","rep_labels")))
